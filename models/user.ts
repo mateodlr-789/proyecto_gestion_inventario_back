@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 
 import db from '../db/connection';
 
-const Type = require('./types'); 
+import Type from './types'; 
 
 const User = db.define('User', {
     id: {
