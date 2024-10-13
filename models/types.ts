@@ -22,4 +22,4 @@ const Type = db.define('Type', {
   timestamps: false, 
 });
 
-module.exports = Type;
+export default Type;
