@@ -3,6 +3,7 @@ import cors from 'cors';
 
 import db from '../db/connection';
 import userRoutes from '../routes/user';
+import productRoutes from '../routes/product';
 
 
 class Server {
@@ -10,7 +11,8 @@ class Server {
     private app: Application;
     private port: string;
     private apiPaths = {
-        user: '/api/user'
+        user: '/api/user',
+        product: '/api/product'
     }
 
     constructor() {
@@ -50,7 +52,9 @@ class Server {
 
     routes() {
         this.app.use( this.apiPaths.user, userRoutes )
+        this.app.use(this.apiPaths.product, productRoutes )
     }
+    
 
 
     listen() {
