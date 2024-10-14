@@ -33,23 +33,11 @@ const Product = db.define('products',
           allowNull: false,
           defaultValue: 0,
         },
-        created_at: {
-          type: DataTypes.DATE,
-          defaultValue: DataTypes.NOW,
-        },
-        updated_at: {
-          type: DataTypes.DATE,
-          defaultValue: DataTypes.NOW,
-        },
-        deleted_at: {
-          type: DataTypes.DATE,
-          allowNull: true,
-        },
       },
       {
         tableName: 'products',
-        timestamps: false,
-        paranoid: false, 
+        timestamps: true,
+        paranoid: true, 
       }
 
 )

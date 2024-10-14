@@ -11,7 +11,7 @@ const User = db.define('User', {
       autoIncrement: true,
       allowNull: false,
     },
-    type_id: {
+    types_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
@@ -41,22 +41,10 @@ const User = db.define('User', {
       type: DataTypes.STRING(150),
       allowNull: true,
     },
-    created_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW, 
-    },
-    deleted_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
   }, {
     tableName: 'users',
-    timestamps: false,
-    paranoid: false, 
+    timestamps: true,
+    paranoid: true, 
   });
   
   User.belongsTo(Type, {
