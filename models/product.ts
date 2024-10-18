@@ -13,10 +13,22 @@ const Product = db.define('products',
         name: {
           type: DataTypes.STRING(255),
           allowNull: false,
+          validate: {
+            notEmpty: true, 
+            isString(value: any) {
+                if (typeof value !== 'string') {
+                    throw new Error('El nombre debe ser una cadena de texto.');
+                }
+            },
+        },
         },
         price: {
           type: DataTypes.FLOAT,
           allowNull: false,
+          validate: {
+            isFloat: { msg: 'El precio debe ser un número flotante válido.' },
+            min: 0,
+        },
         },
         types_id: {
           type: DataTypes.INTEGER,
@@ -32,6 +44,10 @@ const Product = db.define('products',
           type: DataTypes.INTEGER,
           allowNull: false,
           defaultValue: 0,
+          validate: {
+            isInt: { msg: 'El stock debe ser un número entero.' },
+            min: 0, 
+        },
         },
       },
       {
