@@ -9,13 +9,13 @@ export class HttpError extends Error {
 }
 
 export class NotFoundError extends HttpError {
-    constructor(message = 'Recurso no encontrado') {
+    constructor(message = 'Resource not found') {
         super(message, 404);
     }
 }
 
 export class BadRequestError extends HttpError {
-    constructor(message = 'Solicitud inválida') {
+    constructor(message = 'Invalid request') {
         super(message, 400);
     }
 }
@@ -27,7 +27,7 @@ export class DuplicateItem extends HttpError {
 }
 
 export class InternalServerError extends HttpError {
-    constructor(message = 'Error interno del servidor') {
+    constructor(message = 'Internal server error') {
         super(message, 500);
     }
 }
