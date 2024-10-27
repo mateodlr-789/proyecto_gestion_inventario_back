@@ -48,7 +48,7 @@ const User = db.define('User', {
   });
   
   User.belongsTo(Type, {
-    foreignKey: 'type_id',
+    foreignKey: 'types_id',
     as: 'type',
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL',

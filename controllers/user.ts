@@ -1,32 +1,55 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 
 import {generarJWT} from '../helpers/generar-jwt'
 import User from '../models/user';
+import { BadRequestError, NotFoundError } from '../helpers/http-errors';
+import * as yup	from 'yup';
 
-export const getUsers = async( req: Request , res: Response ) => {
+export const getUsers = async( 
+    req: Request, 
+    res: Response,
+    next: NextFunction 
+) => {
+    try{
+        const user = await User.findAll();
+        
+        if (!user){
+            return next(new NotFoundError('There are no users registered'));
+        }
 
-    const user = await User.findAll();
-
-    res.json({ user });
-}
-
-export const getUser = async( req: Request , res: Response ) => {
-
-    const { id } = req.params;
-
-    const user = await User.findByPk( id );
-
-    if( user ) {
-        res.json(user);
-    } else {
-        res.status(404).json({
-            msg: `No existe un usuario con el id ${ id }`
-        });
+        res.json({ user });   
+    } catch(error){
+        next(error)
     }
 }
 
-export const login = async (req: Request, res: Response) => {
+export const getUser = async( 
+    req: Request,
+    res: Response,
+    next: NextFunction 
+) => {
+    try{
+        const { id } = req.params;
+
+        const user = await User.findByPk( id );
+
+        if (!user){
+            return next(new NotFoundError(`There is no user with id ${id}`));
+        }
+        
+        res.json(user);
+        
+    } catch(error){
+        next(error)
+    }
+}
+
+export const login = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     const { email, password } = req.body;
 
     try {
@@ -37,15 +60,11 @@ export const login = async (req: Request, res: Response) => {
         });
 
         if (!user) {
-            return res.status(400).json({
-                msg: 'Usuario o contraseña incorrectos'
-            });
+            return next(new BadRequestError('Incorrect username or password'));
         }
         const validPassword = await bcrypt.compare(password, user.getDataValue('password'));
         if (!validPassword) {
-            return res.status(400).json({
-                msg: 'Usuario o contraseña incorrectos'
-            });
+            return next(new BadRequestError('Incorrect username or password'));
         }
 
         const token = await generarJWT( user.getDataValue('id') );
@@ -55,15 +74,15 @@ export const login = async (req: Request, res: Response) => {
             token
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            msg: 'Hable con el administrador',
-            error: error
-        });
+        next(error);
     }
 }
 
-export const register = async( req: Request , res: Response ) => {
+export const register = async( 
+    req: Request, 
+    res: Response,
+    next:NextFunction
+ ) => {
 
     const { body } = req;
 
@@ -76,9 +95,7 @@ export const register = async( req: Request , res: Response ) => {
         });
 
         if (hasEmail) {
-            return res.status(400).json({
-                msg: 'Ya existe un usuario con el correo ' + body.email
-            });
+            return next(new BadRequestError(`A user already exists with the email ${body.email}`))
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -91,10 +108,85 @@ export const register = async( req: Request , res: Response ) => {
 
     } catch (error) {
 
-        console.error(error);
-        res.status(500).json({
-            msg: 'Hable con el administrador'
-        })    
+        next(error)
+            
     }
 }
 
+export const deleteUser = async(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        
+        const { id } = req.params;
+    
+        const user = await User.findByPk(id)
+    
+        if (!/^\d+$/.test(id)) {
+            return next(new BadRequestError('The id that was sent it is not correct'));
+        }
+    
+        else if (!user){
+            return next(new NotFoundError(`There is no user with id ${id}`));
+        }
+    
+        await user.destroy();
+    
+            res.json({
+                msg: 'User was logically eliminated',
+            });
+    } catch (error) {
+        next(error);
+    }
+
+}
+
+export const createUserSchema = yup.object({
+    types_id: yup
+      .number()
+      .typeError('The type should be an integer')
+      .integer('The type should be an integer')
+      .required('The type is mandatory'),
+
+    name: yup
+      .string()
+      .strict()
+      .max(25, 'The name cannot be longer than 25 characters')
+      .required('Name is required'),
+
+    last_name: yup
+      .string()
+      .strict()
+      .max(25, 'The last name cannot be longer than 25 characters')
+      .required('Last name is required'),
+
+    email: yup
+      .string()
+      .max(50, 'The email cannot be longer than 50 characters')
+      .email('Must be a valid email')
+      .required('Email is required'),
+
+    password: yup
+      .string()
+      .max(150, 'The password cannot be longer than 150 characters')
+      .required('Password is required'),
+});
+
+export const logingUserSchema = yup.object({
+    email: yup
+      .string()
+      .max(50, 'The email cannot be longer than 50 characters')
+      .email('Must be a valid email')
+      .required('Email is required'),
+
+    password: yup
+      .string()
+      .max(150, 'The password cannot be longer than 150 characters')
+      .required('Password is required'),
+});
+
+export const idSchema = yup.object({
+    id: yup.number().integer('The ID must be an integer').required('ID is required'),
+});

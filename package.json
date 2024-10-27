@@ -26,6 +26,7 @@
     "express-validator": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^2.2.5",
-    "sequelize": "^6.5.0"
+    "sequelize": "^6.5.0",
+    "yup": "^1.4.0"
   }
 }

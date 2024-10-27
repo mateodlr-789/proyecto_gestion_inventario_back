@@ -17,7 +17,7 @@ const Product = db.define('products',
             notEmpty: true, 
             isString(value: any) {
                 if (typeof value !== 'string') {
-                    throw new Error('El nombre debe ser una cadena de texto.');
+                    throw new Error('The name should be a string');
                 }
             },
         },
@@ -26,7 +26,7 @@ const Product = db.define('products',
           type: DataTypes.FLOAT,
           allowNull: false,
           validate: {
-            isFloat: { msg: 'El precio debe ser un número flotante válido.' },
+            isFloat: { msg: 'The price should be a valid float' },
             min: 0,
         },
         },
@@ -34,19 +34,39 @@ const Product = db.define('products',
           type: DataTypes.INTEGER,
           allowNull: false,
           references: {
-            model: 'types', // Nombre de la tabla referenciada
+            model: 'types', 
             key: 'id',
           },
           onUpdate: 'CASCADE',
           onDelete: 'SET NULL',
+          validate: {
+            async exists(value: number) {
+              const typeExists = await Type.findByPk(value);
+              if (!typeExists) {
+                throw new Error(`The type_id ${value} doesn't exist in the data base`);
+              }
+            },
+          }
         },
         stock: {
           type: DataTypes.INTEGER,
           allowNull: false,
           defaultValue: 0,
           validate: {
-            isInt: { msg: 'El stock debe ser un número entero.' },
+            isInt: { msg: 'The stock should be an integer' },
             min: 0, 
+        },
+        },
+        image_url: {
+          type: DataTypes.STRING(255),
+          allowNull: false,
+          validate: {
+            notEmpty: true,
+            isString(value: any){
+              if (typeof(value) !== 'string'){
+                throw new Error('the url should be a string');
+              }
+            },
         },
         },
       },
