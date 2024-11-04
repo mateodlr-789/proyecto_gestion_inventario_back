@@ -19,6 +19,7 @@
     "typescript": "^4.1.5"
   },
   "dependencies": {
+    "11-ts-restserver": "file:",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
