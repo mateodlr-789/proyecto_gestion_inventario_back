@@ -2,7 +2,10 @@ import { Router } from 'express';
 
 import { validateSchema } from '../middlewares/validate-schema';
 import { errorHandler } from '../middlewares/error-handler';
-import { createOrder, createOrderSchema, deleteOrder,  getOrders, idSchema } from '../controllers/order';
+import { createOrder,  deleteOrder,  getOrders,  } from '../controllers/order';
+import { createOrderSchema} from '../request/order';
+import { idSchema } from '../request/shared';
+
 
 const router = Router();
 

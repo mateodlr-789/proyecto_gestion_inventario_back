@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { errorHandler } from '../middlewares/error-handler';
 
-import { createProduct, createProductSchema, deleteProduct, getProducts, idSchema } from '../controllers/product';
+import { createProduct,  deleteProduct, getProducts } from '../controllers/product';
 import { validateSchema } from '../middlewares/validate-schema';
+import { createProductSchema } from '../request/product';
+import { idSchema } from '../request/shared';
 
 const router = Router();
 

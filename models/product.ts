@@ -69,6 +69,18 @@ const Product = db.define('products',
             },
         },
         },
+        description: {
+          type: DataTypes.STRING(255),
+          allowNull: false,
+          validate: {
+            notEmpty: true, 
+            isString(value: any) {
+                if (typeof value !== 'string') {
+                    throw new Error('The description should be a string');
+                }
+            },
+        },
+        },
       },
       {
         tableName: 'products',

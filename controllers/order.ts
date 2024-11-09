@@ -1,10 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import db from '../db/connection';
 import Order from '../models/order';
 import { BadRequestError, DuplicateItem, NotFoundError } from '../helpers/http-errors';
 import User from '../models/user';
-import * as yup	from 'yup';
-import OrderProduct from '../models/order-product';
 
 
 
@@ -91,26 +88,3 @@ export const deleteOrder = async(
 
 }
 
-export const createOrderSchema = yup.object({
-    name: yup
-      .string()
-      .strict()
-      .max(255, 'The name cannot be longer than 255 characters')
-      .required('Name is required'),
-    
-    user_id: yup
-      .number()
-      .typeError('The user id should be an integer')
-      .integer('The user id should be an integer')
-      .required('The user id is mandatory'),
-      
-    types_id: yup
-      .number()
-      .typeError('The type should be an integer')
-      .integer('The type should be an integer')
-      .required('The type is mandatory'),
-})
-
-export const idSchema = yup.object({
-    id: yup.number().integer('The ID must be an integer').required('ID is required'),
-});
