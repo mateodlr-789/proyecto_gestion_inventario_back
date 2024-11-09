@@ -16,7 +16,7 @@ module.exports = {
       value: {
         type: Sequelize.STRING(255),
       }
-      // Note: No timestamps fields since timestamps: false in the model
+      
     });
   },
 

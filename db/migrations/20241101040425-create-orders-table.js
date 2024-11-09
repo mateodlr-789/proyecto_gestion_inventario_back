@@ -33,7 +33,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      // Campos de timestamps
+    
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -44,14 +44,14 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.fn('NOW')
       },
-      // Campo para soft delete
+      
       deletedAt: {
         type: Sequelize.DATE,
         allowNull: true,
       }
     });
 
-    // Añadir índices para mejorar el rendimiento
+   
     await queryInterface.addIndex('orders', ['user_id'], {
       name: 'orders_user_id_index'
     });

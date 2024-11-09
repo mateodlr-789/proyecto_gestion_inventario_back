@@ -42,7 +42,7 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false
       },
-      // Campos de timestamps
+      
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -53,14 +53,14 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.fn('NOW')
       },
-      // Campo para soft delete
+      
       deletedAt: {
         type: Sequelize.DATE,
         allowNull: true,
       }
     });
 
-    // Añadir índices para mejorar el rendimiento
+    
     await queryInterface.addIndex('products', ['types_id'], {
       name: 'products_types_id_index'
     });
@@ -69,7 +69,7 @@ module.exports = {
       name: 'products_name_index'
     });
 
-    // Índice para búsquedas por precio
+   
     await queryInterface.addIndex('products', ['price'], {
       name: 'products_price_index'
     });
