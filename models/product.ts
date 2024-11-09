@@ -82,7 +82,7 @@ Product.belongsTo(Type, {
   foreignKey: 'types_id',
   as: 'type',
   onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+  onDelete: 'SET NULL'
 });
 
 
