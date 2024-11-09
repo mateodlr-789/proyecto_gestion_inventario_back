@@ -22,7 +22,7 @@ module.exports = {
   async down (queryInterface, Sequelize) {
       await queryInterface.bulkDelete('types', {
 				name: {
-					[Sequelize.Op.in]: ['entrada', 'principal', 'postre', 'bebida']}
+					[Sequelize.Op.in]: ['entrace', 'main', 'dessert', 'drink']}
 			}, {});
   }
 };
