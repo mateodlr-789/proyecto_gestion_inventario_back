@@ -3,7 +3,6 @@ import OrderProduct from '../models/order-product'
 import { BadRequestError, NotFoundError } from '../helpers/http-errors';
 import db from '../db/connection';
 import Product from '../models/product';
-import * as yup	from 'yup';
 import Order from '../models/order';
 
 export const getOrderProduct = async(
@@ -106,23 +105,3 @@ export const addOrderProduct = async(
         next(error);
     }
 }
-
-export const addOrderProductSchema = yup.object({
-    order_id: yup.number().integer().positive().required(),
-
-    products: yup
-        .array()
-        .of(
-            yup.object({
-                product_id: yup.number().integer().positive().required(),
-                total: yup.number().integer().positive().required(),   
-            })
-        )
-        .min(1)
-        .required(),
-
-});
-
-export const idSchema = yup.object({
-    id: yup.number().integer('The ID must be an integer').required('ID is required'),
-});
