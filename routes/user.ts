@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { getUser, getUsers, register, login, deleteUser } from '../controllers/user';
+import { getUser, getUsers, register, login, deleteUser, updateRole } from '../controllers/user';
 import { validateJWT } from '../middlewares/validate-jwt';
 import { validateSchema } from '../middlewares/validate-schema';
 import { errorHandler } from '../middlewares/error-handler';
@@ -9,27 +9,32 @@ import { createUserSchema, logingUserSchema } from '../request/user';
 
 const router = Router();
 
-router.get('/',   getUsers);
+router.get('/', getUsers);
 router.get(
-    '/:id', 
+    '/:id',
     [validateJWT],
-    validateSchema(idSchema, 'params'),   
-    getUser 
+    validateSchema(idSchema, 'params'),
+    getUser
 );
 router.delete(
     '/:id',
     validateSchema(idSchema, 'params'),
-    deleteUser 
+    deleteUser
 );
 router.post(
     '/register',
     validateSchema(createUserSchema),
-    register 
+    register
 );
 router.post(
     '/login',
-    validateSchema(logingUserSchema), 
+    validateSchema(logingUserSchema),
     login
+);
+router.post(
+    '/:id/role',
+    validateSchema(idSchema, 'params'),
+    updateRole
 );
 
 router.use(errorHandler);
