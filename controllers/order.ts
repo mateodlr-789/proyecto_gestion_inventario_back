@@ -7,41 +7,20 @@ import OrderProduct from '../models/order-product';
 import Product from '../models/product';
 
 
-export const getOrders = async (
+export const getOrders = async(
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
     try {
-
+        
         const order = await Order.findAll();
-
-        if (!order) {
+    
+        if (!order){
             return next(new NotFoundError('There are no orders registered'));
         }
-
-        const userIds = order.map(order => order.get('user_id') as number);
-
-        const users = await Promise.all(
-            userIds.map(userId => User.findByPk(userId))
-        );
-
-        const userMap = users.reduce((map, user) => {
-            if (user) {
-                const id = user.get('id') as number;
-                const name = user.get('name') as string;
-                map[id] = name;
-            }
-            return map;
-        }, {} as Record<number, string>);
-
-        const ordersWithUserNames = order.map(order => ({
-            ...order.toJSON(),
-            user_name: userMap[order.get('user_id') as number] || null,
-        }));
-
-
-        res.json({ orders: ordersWithUserNames });
+    
+        res.json({ order });
     } catch (error) {
         next(error);
     }
