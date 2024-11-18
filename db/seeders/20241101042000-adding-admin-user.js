@@ -13,7 +13,7 @@ module.exports = {
 				name: 'admin',
 				last_name: 'admin',
 				email: 'admin@admin.com',
-				password: '$2b$10$Om0ao796LzzvP/01Lp.9pe29cQuXbKXQWlnu7eBgVWuSqn30cjHpq',
+				password: '$2b$10$xeRLAOpmOVoOkNwXyZ9bOebas5ufkDaeO1492lpdWIS1zumZ54ZjC',
 			}
 			], {});
 	},
