@@ -1,4 +1,7 @@
 import { Sequelize, Dialect } from 'sequelize';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const dbDialect: Dialect = (process.env.DB_DIALECT as Dialect) || 'mysql';
 const dbHots: string = (process.env.DB_HOST) || 'localhost';
