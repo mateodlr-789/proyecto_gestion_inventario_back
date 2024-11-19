@@ -6,6 +6,9 @@ import userRoutes from '../routes/user';
 import productRoutes from '../routes/product';
 import orderRouters from '../routes/order';
 import orderProductRouters from '../routes/order-product'
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 
 class Server {
