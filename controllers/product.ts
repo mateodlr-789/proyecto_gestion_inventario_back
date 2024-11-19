@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import Product from '../models/product'
-import { BadRequestError, DuplicateItem, NotFoundError } from '../helpers/http-errors';
-import db from '../db/connection';
+import { BadRequestError, NotFoundError } from '../helpers/http-errors';
+import { handleCreateProduct, handleDeleteProduct, handleUpdateStock } from '../services/product';
 
 export const getProducts = async (
     req: Request,
@@ -23,9 +23,6 @@ export const getProducts = async (
         next(error);
     }
 
-
-
-
 }
 
 export const createProduct = async (
@@ -33,18 +30,10 @@ export const createProduct = async (
     res: Response,
     next: NextFunction
 ) => {
-    const { body } = req;
-    const { name } = req.body;
 
     try {
 
-        const productName = await Product.findOne({ where: { name: name } });
-
-        if (productName) {
-            return next(new DuplicateItem(`The product ${name} already exist`));
-        }
-
-        const product = await Product.create(body);
+				const product = await handleCreateProduct(req.body);
 
         res.status(201).json({
             success: true,
@@ -70,21 +59,12 @@ export const deleteProduct = async (
     const { id } = req.params;
 
     try {
-        const product = await Product.findByPk(id);
 
-        if (!/^\d+$/.test(id)) {
-            return next(new BadRequestError('The id that was sent it is not correct'));
-        }
-
-        else if (!product) {
-            return next(new NotFoundError(`There is not a product with the id ${id}`));
-        }
-
-
-        await product.destroy();
+				const msg = await handleDeleteProduct(id);
 
         res.json({
-            msg: 'Product was logically eliminated',
+						succes: true,
+						msg,
         });
     } catch (error) {
 
@@ -97,24 +77,13 @@ export const updateStock = async (
     res: Response,
     next: NextFunction
 ) => {
-    const { id } = req.params;
-    const { addition } = req.body;
 
     try {
-        const product = await Product.findByPk(id);
 
-        if (!/^\d+$/.test(id)) {
-            return next(new BadRequestError('The id that was sent it is not correct'));
-        }
-
-        else if (!product) {
-            return next(new NotFoundError(`There is not a product with the id ${id}`));
-        }
-
-        await product.update({ stock: db.literal(`stock + ${addition}`) });
+				const msg = await handleUpdateStock(req.params.id, req.body.addition);
 
         res.json({
-            msg: 'Stock was updated',
+            msg
         });
 
     } catch (error) {
