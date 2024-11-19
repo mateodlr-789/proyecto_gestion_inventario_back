@@ -6,6 +6,7 @@ import { validateSchema } from '../middlewares/validate-schema';
 import { errorHandler } from '../middlewares/error-handler';
 import { idSchema } from '../request/shared';
 import { createUserSchema, logingUserSchema } from '../request/user';
+import helmet from 'helmet';
 
 const router = Router();
 
@@ -38,5 +39,18 @@ router.post(
 );
 
 router.use(errorHandler);
+router.use(  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"], 
+        styleSrc: ["'self'", "'unsafe-inline'"], 
+        imgSrc: ["'self'", "data:"], 
+        frameSrc: ["'none'"], 
+      },
+    },
+    referrerPolicy: { policy: 'no-referrer' },
+  })
+);
 
 export default router;
